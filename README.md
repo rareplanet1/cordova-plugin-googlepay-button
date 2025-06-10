@@ -11,7 +11,7 @@ cordova plugin add cordova-plugin-googlepay-button
 or for Cordova build service, e.g. [VoltBuilder](https://volt.build/), add the following to config.xml:
 
 ```
-<plugin name="cordova-plugin-googlepay-button" source="npm" spec="0.0.3" />
+<plugin name="cordova-plugin-googlepay-button" source="npm" spec="0.0.4" />
 ```
 
 ## Usage
