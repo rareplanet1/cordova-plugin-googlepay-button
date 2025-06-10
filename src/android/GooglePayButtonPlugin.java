@@ -1,0 +1,113 @@
+package com.plugin.googlepaybutton;
+
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
+import org.apache.cordova.CordovaWebView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
+import com.google.android.gms.wallet.button.ButtonConstants;
+import com.google.android.gms.wallet.button.ButtonOptions;
+import com.google.android.gms.wallet.button.PayButton;
+
+public class GooglePayButtonPlugin extends CordovaPlugin {
+    
+    private PayButton payButton;
+    private CallbackContext callbackContext;
+    
+    @Override
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        this.callbackContext = callbackContext;
+        
+        if (action.equals("showPayButton")) {
+            this.showPayButton();
+            return true;
+        } else if (action.equals("hidePayButton")) {
+            this.hidePayButton();
+            return true;
+        }
+        return false;
+    }
+    
+    private void showPayButton() {
+        cordova.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Get the WebView's parent container
+                    View webView = webView.getView();
+                    ViewGroup parent = (ViewGroup) webView.getParent();
+                    
+                    // Create PayButton if not exists
+                    if (payButton == null) {
+                        Context context = cordova.getActivity().getApplicationContext();
+                        payButton = new PayButton(context);
+                        
+                        // Configure button using the official API
+                        ButtonOptions buttonOptions = ButtonOptions.newBuilder()
+                            .setButtonTheme(ButtonConstants.ButtonTheme.DARK)
+                            .setButtonType(ButtonConstants.ButtonType.CHECKOUT)
+                            .setCornerRadius(4)
+                            .build();
+                        
+                        payButton.initialize(buttonOptions);
+                        
+                        // Set click listener
+                        payButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (callbackContext != null) {
+                                    callbackContext.success("clicked");
+                                }
+                            }
+                        });
+                    }
+                    
+                    // Remove from any previous parent
+                    if (payButton.getParent() != null) {
+                        ((ViewGroup) payButton.getParent()).removeView(payButton);
+                    }
+                    
+                    // Add to bottom of screen
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT
+                    );
+                    params.gravity = android.view.Gravity.BOTTOM;
+                    params.setMargins(40, 20, 40, 100); // left, top, right, bottom margins
+                    
+                    parent.addView(payButton, params);
+                    payButton.setVisibility(View.VISIBLE);
+                    
+                } catch (Exception e) {
+                    if (callbackContext != null) {
+                        callbackContext.error("Error showing PayButton: " + e.getMessage());
+                    }
+                }
+            }
+        });
+    }
+    
+    private void hidePayButton() {
+        cordova.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (payButton != null) {
+                    payButton.setVisibility(View.GONE);
+                    if (payButton.getParent() != null) {
+                        ((ViewGroup) payButton.getParent()).removeView(payButton);
+                    }
+                }
+            }
+        });
+    }
+}

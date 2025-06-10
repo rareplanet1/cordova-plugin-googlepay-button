@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-googlepay-button"
+        version="0.0.1">
+    
+    <name>Google Pay Button Plugin</name>
+    <description>Cordova plugin for Google Pay PayButton API integration</description>
+    <license>MIT</license>
+    <keywords>cordova,google,pay,button,paybutton</keywords>
+    
+    <js-module src="www/GooglePayButton.js" name="GooglePayButton">
+        <clobbers target="window.GooglePayButton" />
+    </js-module>
+    
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="GooglePayButtonPlugin">
+                <param name="android-package" value="com.plugin.googlepaybutton.GooglePayButtonPlugin" />
+            </feature>
+        </config-file>
+        
+        <!-- Google Pay dependencies -->
+        <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
+        
+        <!-- Source files -->
+        <source-file src="src/android/GooglePayButtonPlugin.java" 
+                     target-dir="src/com/plugin/googlepaybutton" />
+    </platform>
+</plugin>

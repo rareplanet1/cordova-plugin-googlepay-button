@@ -1,0 +1,28 @@
+{
+  "name": "cordova-plugin-googlepay-button",
+  "version": "0.0.1",
+  "description": "Cordova plugin for implementing the Google PayButton API",
+  "cordova": {
+    "id": "cordova-plugin-googlepay-button",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+  	"cordova-android",
+    "googlepay",
+    "button",
+    "paybutton"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rareplanet1/cordova-plugin-googlepay-button.git"
+  },
+  "author": "John Daniels",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rareplanet1/cordova-plugin-googlepay-button/issues"
+  },
+  "homepage": "https://github.com/rareplanet1/cordova-plugin-googlepay-button#readme"
+}
