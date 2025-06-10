@@ -1,4 +1,4 @@
-package com.plugin.googlepaybutton;
+package com.plugin.googlepay;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
@@ -20,9 +20,9 @@ import com.google.android.gms.wallet.button.ButtonConstants;
 import com.google.android.gms.wallet.button.ButtonOptions;
 import com.google.android.gms.wallet.button.PayButton;
 
-public class GooglePayButtonPlugin extends CordovaPlugin {
+public class GooglePayButton extends CordovaPlugin {
     
-    private static final String TAG = "GooglePayButtonPlugin";
+    private static final String TAG = "GooglePayButton";
     private PayButton payButton;
     private CallbackContext callbackContext;
     private CordovaWebView webView;

@@ -41,7 +41,7 @@ class GooglePayButton {
                     }
                 },
                 (error) => reject(error),
-                'GooglePayButtonPlugin',
+                'GooglePayButton',
                 'createPayButton',
                 [options]
             );
@@ -66,7 +66,7 @@ class GooglePayButton {
             cordova.exec(
                 resolve,
                 reject,
-                'GooglePayButtonPlugin',
+                'GooglePayButton',
                 'showPayButton',
                 [position]
             );
@@ -86,7 +86,7 @@ class GooglePayButton {
             cordova.exec(
                 resolve,
                 reject,
-                'GooglePayButtonPlugin',
+                'GooglePayButton',
                 'hidePayButton',
                 []
             );
@@ -107,7 +107,7 @@ class GooglePayButton {
             cordova.exec(
                 resolve,
                 reject,
-                'GooglePayButtonPlugin',
+                'GooglePayButton',
                 'updatePayButton',
                 [options]
             );

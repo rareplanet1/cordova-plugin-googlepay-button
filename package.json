@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-googlepay-button",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "Cordova plugin for implementing the Google PayButton API",
   "cordova": {
     "id": "cordova-plugin-googlepay-button",
