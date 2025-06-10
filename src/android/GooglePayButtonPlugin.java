@@ -14,6 +14,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.util.Log;
 
 import com.google.android.gms.wallet.button.ButtonConstants;
 import com.google.android.gms.wallet.button.ButtonOptions;
@@ -21,8 +22,16 @@ import com.google.android.gms.wallet.button.PayButton;
 
 public class GooglePayButtonPlugin extends CordovaPlugin {
     
+    private static final String TAG = "GooglePayButtonPlugin";
     private PayButton payButton;
     private CallbackContext callbackContext;
+    private CordovaWebView webView;
+    
+    @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        this.webView = webView;
+    }
     
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -44,8 +53,8 @@ public class GooglePayButtonPlugin extends CordovaPlugin {
             public void run() {
                 try {
                     // Get the WebView's parent container
-                    View webView = webView.getView();
-                    ViewGroup parent = (ViewGroup) webView.getParent();
+                    View webViewView = webView.getView();
+                    ViewGroup parent = (ViewGroup) webViewView.getParent();
                     
                     // Create PayButton if not exists
                     if (payButton == null) {
@@ -65,6 +74,7 @@ public class GooglePayButtonPlugin extends CordovaPlugin {
                         payButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                Log.d(TAG, "PayButton clicked");
                                 if (callbackContext != null) {
                                     callbackContext.success("clicked");
                                 }
@@ -88,7 +98,10 @@ public class GooglePayButtonPlugin extends CordovaPlugin {
                     parent.addView(payButton, params);
                     payButton.setVisibility(View.VISIBLE);
                     
+                    Log.d(TAG, "PayButton shown successfully");
+                    
                 } catch (Exception e) {
+                    Log.e(TAG, "Error showing PayButton: " + e.getMessage(), e);
                     if (callbackContext != null) {
                         callbackContext.error("Error showing PayButton: " + e.getMessage());
                     }
@@ -101,11 +114,16 @@ public class GooglePayButtonPlugin extends CordovaPlugin {
         cordova.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (payButton != null) {
-                    payButton.setVisibility(View.GONE);
-                    if (payButton.getParent() != null) {
-                        ((ViewGroup) payButton.getParent()).removeView(payButton);
+                try {
+                    if (payButton != null) {
+                        payButton.setVisibility(View.GONE);
+                        if (payButton.getParent() != null) {
+                            ((ViewGroup) payButton.getParent()).removeView(payButton);
+                        }
+                        Log.d(TAG, "PayButton hidden successfully");
                     }
+                } catch (Exception e) {
+                    Log.e(TAG, "Error hiding PayButton: " + e.getMessage(), e);
                 }
             }
         });
