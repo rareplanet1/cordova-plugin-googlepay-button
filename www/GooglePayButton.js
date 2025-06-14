@@ -1,119 +1,27 @@
 // GooglePayButton.js - JavaScript interface for the Cordova plugin
 
-class GooglePayButton {
-    constructor() {
-        this.isReady = false;
-        this.callbacks = {};
-        
-        // Wait for Cordova to be ready
-        document.addEventListener('deviceready', () => {
-            this.isReady = true;
-        }, false);
-    }
+var exec = require('cordova/exec');
+
+var GooglePayButton = {
     
     /**
-     * Create the Google Pay button with specified options
-     * @param {Object} options - Button configuration options
-     * @param {string} options.theme - 'light' or 'dark'
-     * @param {string} options.type - 'buy', 'checkout', 'pay', etc.
-     * @param {number} options.cornerRadius - Corner radius in dp
-     * @param {string} options.allowedPaymentMethods - JSON string of allowed payment methods
-     * @param {Function} callback - Callback function for button clicks
+     * Show the Google Pay button
+     * When clicked, the successCallback will be called with "clicked"
+     * @param {Function} successCallback - Success callback function, receives "clicked" when button is tapped
+     * @param {Function} errorCallback - Error callback function
      */
-    createButton(options, callback) {
-        return new Promise((resolve, reject) => {
-            if (!this.isReady) {
-                reject(new Error('Cordova not ready'));
-                return;
-            }
-            
-            // Store the click callback
-            if (callback) {
-                this.callbacks.onClick = callback;
-            }
-            
-            cordova.exec(
-                (result) => {
-                    if (result === 'payButtonClicked' && this.callbacks.onClick) {
-                        this.callbacks.onClick();
-                    } else {
-                        resolve(result);
-                    }
-                },
-                (error) => reject(error),
-                'GooglePayButton',
-                'createPayButton',
-                [options]
-            );
-        });
-    }
-    
-    /**
-     * Show the Google Pay button at specified position
-     * @param {Object} position - Button position and size
-     * @param {number} position.x - X coordinate in dp
-     * @param {number} position.y - Y coordinate in dp
-     * @param {number} position.width - Width in dp
-     * @param {number} position.height - Height in dp
-     */
-    showButton(position) {
-        return new Promise((resolve, reject) => {
-            if (!this.isReady) {
-                reject(new Error('Cordova not ready'));
-                return;
-            }
-            
-            cordova.exec(
-                resolve,
-                reject,
-                'GooglePayButton',
-                'showPayButton',
-                [position]
-            );
-        });
-    }
+    showPayButton: function(successCallback, errorCallback) {
+        exec(successCallback, errorCallback, 'GooglePayButton', 'showPayButton', []);
+    },
     
     /**
      * Hide the Google Pay button
+     * @param {Function} successCallback - Success callback function
+     * @param {Function} errorCallback - Error callback function
      */
-    hideButton() {
-        return new Promise((resolve, reject) => {
-            if (!this.isReady) {
-                reject(new Error('Cordova not ready'));
-                return;
-            }
-            
-            cordova.exec(
-                resolve,
-                reject,
-                'GooglePayButton',
-                'hidePayButton',
-                []
-            );
-        });
+    hidePayButton: function(successCallback, errorCallback) {
+        exec(successCallback, errorCallback, 'GooglePayButton', 'hidePayButton', []);
     }
-    
-    /**
-     * Update button options
-     * @param {Object} options - New button options
-     */
-    updateButton(options) {
-        return new Promise((resolve, reject) => {
-            if (!this.isReady) {
-                reject(new Error('Cordova not ready'));
-                return;
-            }
-            
-            cordova.exec(
-                resolve,
-                reject,
-                'GooglePayButton',
-                'updatePayButton',
-                [options]
-            );
-        });
-    }
-}
+};
 
-// Export for use in React/ES6 modules
-export default new GooglePayButton();
+module.exports = GooglePayButton;
